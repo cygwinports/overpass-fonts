@@ -1,0 +1,28 @@
+inherit font
+
+NAME="overpass-fonts"
+VERSION=2.0
+RELEASE=1
+CATEGORY="X11"
+SUMMARY="Fonts based on U.S. highway signage typeface"
+DESCRIPTION="Free and open source typeface based on the U.S. interstate highway
+road signage type system. It is sans-serif and suitable for both body and
+titling text."
+HOMEPAGE="http://overpassfont.org/"
+SRC_URI="
+	https://github.com/RedHatBrand/overpass/releases/download/${VERSION}/overpass-fonts-ttf-2.zip
+	http://pkgs.fedoraproject.org/cgit/${NAME}.git/plain/${NAME}-fontconfig.conf
+"
+SRC_DIR=.
+
+ARCH=noarch
+
+src_compile() { :; }
+
+src_install() {
+	cd ${S}
+	# spaces in filenames
+	dodir ${FONTSDIR}/${NAME%-fonts}
+	find -name '*.ttf' -print0 | xargs -0 cp -p -t ${D}${FONTSDIR}/${NAME%-fonts} '{}' +
+	newfontconf ${NAME}-fontconfig.conf 60-${NAME%-fonts}.conf
+}
